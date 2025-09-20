@@ -885,7 +885,8 @@ function App() {
           <Router>
             <ThemeToggle />
             <Routes>
-              <Route path="/" element={<LoginPage />} />
+              <Route path="/" element={<StudentLoginPage />} />
+              <Route path="/admin-login" element={<AdminLoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route 
                 path="/student-dashboard" 
