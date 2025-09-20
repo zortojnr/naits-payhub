@@ -156,7 +156,8 @@ const ThemeToggle = () => {
   );
 };
 
-const LoginPage = () => {
+// Student Login Page
+const StudentLoginPage = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -169,10 +170,10 @@ const LoginPage = () => {
 
     try {
       const userData = await login(identifier, password);
-      if (userData.role === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
+      if (userData.role === 'student') {
         navigate('/student-dashboard');
+      } else {
+        toast.error('Please use admin login for administrative access');
       }
     } catch (error) {
       // Error already handled in login function
@@ -196,19 +197,19 @@ const LoginPage = () => {
 
         <Card className="shadow-xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+            <CardTitle className="text-2xl text-center">Student Sign In</CardTitle>
             <CardDescription className="text-center">
-              Enter your Student ID or Admin credentials
+              Enter your Student ID and password
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="identifier">Student ID / Username</Label>
+                <Label htmlFor="identifier">Student ID</Label>
                 <Input
                   id="identifier"
                   type="text"
-                  placeholder="IMT/21U/1234 or admin"
+                  placeholder="IMT/21U/1234"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   required
@@ -232,11 +233,11 @@ const LoginPage = () => {
                 className="w-full h-11 bg-indigo-600 hover:bg-indigo-700" 
                 disabled={isLoading}
               >
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                {isLoading ? 'Signing In...' : 'Sign In as Student'}
               </Button>
             </form>
             
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center space-y-3">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 New student?{' '}
                 <Button 
@@ -247,15 +248,136 @@ const LoginPage = () => {
                   Register here
                 </Button>
               </p>
+              
+              <div className="flex items-center justify-center">
+                <div className="border-t border-gray-300 dark:border-gray-600 flex-1"></div>
+                <span className="px-3 text-sm text-gray-500 dark:text-gray-400">or</span>
+                <div className="border-t border-gray-300 dark:border-gray-600 flex-1"></div>
+              </div>
+              
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => navigate('/admin-login')}
+              >
+                Admin Login
+              </Button>
             </div>
 
             <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo Credentials:</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo Student:</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Admin: <code>admin</code> / <code>admin123</code>
+                ID: <code>IMT/21U/1234</code> | Password: <code>password</code>
               </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+// Admin Login Page
+const AdminLoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const userData = await login(username, password);
+      if (userData.role === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
+        toast.error('Please use student login for student access');
+      }
+    } catch (error) {
+      // Error already handled in login function
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="mx-auto w-20 h-20 bg-slate-700 rounded-xl flex items-center justify-center mb-4">
+            <span className="text-2xl font-bold text-white">NAITS</span>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Admin Portal</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Administrative Dashboard Access
+          </p>
+        </div>
+
+        <Card className="shadow-xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">Admin Sign In</CardTitle>
+            <CardDescription className="text-center">
+              Enter your administrative credentials
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="admin"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  className="h-11"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter admin password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="h-11"
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full h-11 bg-slate-700 hover:bg-slate-800" 
+                disabled={isLoading}
+              >
+                {isLoading ? 'Signing In...' : 'Sign In as Admin'}
+              </Button>
+            </form>
+            
+            <div className="mt-6 text-center">
+              <div className="flex items-center justify-center">
+                <div className="border-t border-gray-300 dark:border-gray-600 flex-1"></div>
+                <span className="px-3 text-sm text-gray-500 dark:text-gray-400">or</span>
+                <div className="border-t border-gray-300 dark:border-gray-600 flex-1"></div>
+              </div>
+              
+              <Button 
+                variant="outline" 
+                className="w-full mt-3"
+                onClick={() => navigate('/')}
+              >
+                Student Login
+              </Button>
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo Admin:</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Student: <code>IMT/21U/1234</code> / <code>password</code>
+                Username: <code>admin</code> | Password: <code>admin123</code>
               </p>
             </div>
           </CardContent>
