@@ -376,9 +376,9 @@ const AdminLoginPage = () => {
             </div>
 
             <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo Admin:</p>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Admin Access:</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                Username: <code>admin</code> | Password: <code>admin123</code>
+                Contact system administrator for credentials
               </p>
             </div>
           </CardContent>
