@@ -743,13 +743,15 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Admin Dashboard</h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Payment Management System</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 hidden sm:block">Payment Management System</p>
               </div>
             </div>
-            <Button variant="ghost" onClick={logout} className="text-red-600 hover:text-red-700">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" onClick={logout} className="text-red-600 hover:text-red-700 text-sm px-2 sm:px-4">
+                <LogOut className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Logout</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
