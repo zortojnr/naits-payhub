@@ -268,7 +268,7 @@ const StudentLoginPage = () => {
             <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
               <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Demo Student:</p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                ID: <code>IMT/21U/1234</code> | Password: <code>password</code>
+                Register with valid Student ID format and email
               </p>
             </div>
           </CardContent>
