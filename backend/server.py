@@ -278,13 +278,43 @@ async def get_all_payments(current_user: User = Depends(get_current_user)):
     if current_user.role != UserRole.ADMIN:
         raise HTTPException(status_code=403, detail="Admin access required")
     
-    payments = await db.payments.find().to_list(1000)
-    total_revenue = sum(p['amount'] for p in payments if p['status'] == 'completed')
+    # Get all payments with user details
+    payments_cursor = db.payments.aggregate([
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "id",
+                "as": "user_details"
+            }
+        },
+        {
+            "$unwind": "$user_details"
+        },
+        {
+            "$project": {
+                "id": 1,
+                "user_id": 1,
+                "fee_type": 1,
+                "amount": 1,
+                "currency": 1,
+                "gateway_ref": 1,
+                "status": 1,
+                "paid_at": 1,
+                "created_at": 1,
+                "student_id": "$user_details.student_id",
+                "student_email": "$user_details.email"
+            }
+        }
+    ])
+    
+    payments_with_details = await payments_cursor.to_list(1000)
+    total_revenue = sum(p['amount'] for p in payments_with_details if p['status'] == 'completed')
     
     return {
-        "payments": [Payment(**payment) for payment in payments],
+        "payments": payments_with_details,
         "total_revenue": total_revenue,
-        "total_count": len(payments)
+        "total_count": len(payments_with_details)
     }
 
 @api_router.put("/admin/payments/{payment_id}/status")
