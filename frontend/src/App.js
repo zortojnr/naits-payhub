@@ -803,56 +803,58 @@ const AdminDashboard = () => {
             <CardTitle>All Payments</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Student ID</TableHead>
-                  <TableHead>Fee Type</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {payments.map((payment) => (
-                  <TableRow key={payment.id}>
-                    <TableCell className="font-medium">{payment.user_id.substring(0, 8)}...</TableCell>
-                    <TableCell className="capitalize">{payment.fee_type}</TableCell>
-                    <TableCell>₦{payment.amount}</TableCell>
-                    <TableCell>
-                      <Badge 
-                        variant={payment.status === 'completed' ? 'default' : 'secondary'}
-                        className={payment.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
-                      >
-                        {payment.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{new Date(payment.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      <Select 
-                        value={payment.status} 
-                        onValueChange={(value) => updatePaymentStatus(payment.id, value)}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="completed">Completed</SelectItem>
-                          <SelectItem value="failed">Failed</SelectItem>
-                          <SelectItem value="disputed">Disputed</SelectItem>
-                          <SelectItem value="refunded">Refunded</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[100px]">Student ID</TableHead>
+                    <TableHead>Fee Type</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="hidden sm:table-cell">Date</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            {payments.length === 0 && (
-              <p className="text-center text-gray-500 py-8">No payments found</p>
-            )}
+                </TableHeader>
+                <TableBody>
+                  {payments.map((payment) => (
+                    <TableRow key={payment.id}>
+                      <TableCell className="font-medium text-xs sm:text-sm">{payment.user_id.substring(0, 8)}...</TableCell>
+                      <TableCell className="capitalize text-xs sm:text-sm">{payment.fee_type}</TableCell>
+                      <TableCell className="text-xs sm:text-sm">₦{payment.amount.toLocaleString()}</TableCell>
+                      <TableCell>
+                        <Badge 
+                          variant={payment.status === 'completed' ? 'default' : 'secondary'}
+                          className={`text-xs ${payment.status === 'completed' ? 'bg-green-100 text-green-800' : ''}`}
+                        >
+                          {payment.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell text-xs sm:text-sm">{new Date(payment.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <Select 
+                          value={payment.status} 
+                          onValueChange={(value) => updatePaymentStatus(payment.id, value)}
+                        >
+                          <SelectTrigger className="w-24 sm:w-32 text-xs">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="failed">Failed</SelectItem>
+                            <SelectItem value="disputed">Disputed</SelectItem>
+                            <SelectItem value="refunded">Refunded</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              {payments.length === 0 && (
+                <p className="text-center text-gray-500 py-8">No payments found</p>
+              )}
+            </div>
           </CardContent>
         </Card>
       </main>
