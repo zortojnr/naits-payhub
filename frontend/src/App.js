@@ -628,7 +628,7 @@ const StudentDashboard = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label>Amount (NGN)</Label>
+                  <Label>Amount (₦)</Label>
                   <Input
                     type="number"
                     value={newPayment.amount}
