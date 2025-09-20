@@ -302,33 +302,10 @@ async def update_payment_status(payment_id: str, status: PaymentStatus, current_
     
     return {"message": "Payment status updated successfully"}
 
-# Seed default admin user and demo student
+# Remove seed users - let users register naturally
 @app.on_event("startup")
-async def create_default_users():
-    # Create default admin
-    existing_admin = await db.users.find_one({"username": "admin"})
-    if not existing_admin:
-        admin_user = User(
-            username="admin",
-            password_hash=hash_password("admin123"),
-            role=UserRole.ADMIN
-        )
-        await db.users.insert_one(admin_user.dict())
-        logger.info("Default admin user created")
-    
-    # Create demo student
-    existing_student = await db.users.find_one({"student_id": "IMT/21U/1234"})
-    if not existing_student:
-        student_user = User(
-            student_id="IMT/21U/1234",
-            email="21u1234@students.mau.edu.ng",
-            password_hash=hash_password("password"),
-            role=UserRole.STUDENT,
-            department="Computer Science",
-            level="200"
-        )
-        await db.users.insert_one(student_user.dict())
-        logger.info("Demo student user created")
+async def startup_tasks():
+    logger.info("NAITS Student Portal started successfully")
 
 # Include the router in the main app
 app.include_router(api_router)
