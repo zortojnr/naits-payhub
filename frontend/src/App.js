@@ -663,14 +663,14 @@ const StudentDashboard = () => {
                   <p className="text-center text-gray-500 py-8">No payments yet</p>
                 ) : (
                   payments.map((payment) => (
-                    <div key={payment.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
+                    <div key={payment.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg space-y-2 sm:space-y-0">
+                      <div className="flex-1">
                         <p className="font-medium capitalize">{payment.fee_type}</p>
                         <p className="text-sm text-gray-500">
-                          ₦{payment.amount} • {new Date(payment.created_at).toLocaleDateString()}
+                          ₦{payment.amount.toLocaleString()} • {new Date(payment.created_at).toLocaleDateString()}
                         </p>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 flex-shrink-0">
                         <Badge 
                           variant={payment.status === 'completed' ? 'default' : 'secondary'}
                           className={payment.status === 'completed' ? 'bg-green-100 text-green-800' : ''}
@@ -682,8 +682,9 @@ const StudentDashboard = () => {
                             size="sm" 
                             variant="outline"
                             onClick={() => downloadReceipt(payment.id)}
+                            className="text-xs"
                           >
-                            <FileText className="h-4 w-4 mr-1" />
+                            <FileText className="h-3 w-3 mr-1" />
                             Receipt
                           </Button>
                         )}
