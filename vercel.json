@@ -3,16 +3,21 @@
   "builds": [
     {
       "src": "frontend/package.json",
-      "use": "@vercel/static-build"
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
+      "src": "backend/server.py",
+      "use": "@vercel/python"
     }
   ],
-  "build": {
-    "env": {
-      "CI": "false"
-    }
-  },
-  "functions": {},
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/server.py"
+    },
     {
       "src": "/static/(.*)",
       "headers": {
@@ -24,5 +29,8 @@
       "src": "/(.*)",
       "dest": "/frontend/build/index.html"
     }
-  ]
+  ],
+  "env": {
+    "CI": "false"
+  }
 }
